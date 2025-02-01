@@ -3,6 +3,7 @@ package br.com.FelipeTomazoti.desafioUOL.service;
 import br.com.FelipeTomazoti.desafioUOL.domain.Player;
 import br.com.FelipeTomazoti.desafioUOL.domain.enums.PlayerEnum;
 import br.com.FelipeTomazoti.desafioUOL.repository.PlayerRepository;
+import br.com.FelipeTomazoti.desafioUOL.service.exception.NoCodenamesAvailable;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.json.JSONException;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,9 @@ public record PlayerService(PlayerRepository playerRepository) {
             player.setPlayerGroup(PlayerEnum.LIGA_DA_JUSTICA);
         }
         player.setCodename(codename(player.getPlayerGroup()));
+        if (player.getCodename() == null) {
+            throw new NoCodenamesAvailable("Sorry!, no codenames available");
+        }
         return playerRepository.save(player);
     }
 
